@@ -1,14 +1,16 @@
 from sqlmodel import SQLModel, Field
 from .departments import Department
-from datetime import date
+from datetime import datetime
 
 class UserRole(SQLModel, table=True):
+    __tablename__ = "roles"
     id: int = Field(default=None, primary_key=True)
     name: str = Field(unique=True, max_length=20, nullable=False)
 
 class User(SQLModel, table=True):
+    __tablename__ = "users"
     id: int = Field(default=None, primary_key=True)
-    department_id: str = Field(foreign_key="departments.id")
+    department_id: int = Field(foreign_key="departments.id")
     role_id: int = Field(foreign_key="roles.id")
     surname: str = Field(max_length=100, nullable=False)
     name: str = Field(max_length=100, nullable=False)
@@ -20,4 +22,4 @@ class User(SQLModel, table=True):
     inn: str = Field(unique=True, max_length=12)
     snils: str = Field(unique=True, max_length=15)
     password_hash: str = Field(max_length=255, nullable=False)
-    created_at: date = Field(default=None)
+    created_at: datetime = Field(default=None)

@@ -9,20 +9,15 @@ async def on_startup(app: FastAPI):
     yield
     close_db()
 
-# Главное приложение
-app = FastAPI(
+app = FastAPI()
+
+app_v1 = FastAPI(
     title="Kanban Board API",
     version="1.0.0",
     openapi_url="/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=on_startup
-)
-
-# Подприложение для API v1
-app_v1 = FastAPI(
-    title="Catalog API v1",
-    version="1.0.0"
 )
 
 # Монтируем app_v1 в главное приложение
