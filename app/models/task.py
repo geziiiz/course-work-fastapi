@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from .departments import Department
+
 from datetime import date, datetime
 
 class TaskStatus(SQLModel, table=True):

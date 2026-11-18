@@ -1,3 +1,10 @@
 .venv
 .DS_Store
 .env
+app/__pycache__
+app/api/__pycache__
+app/api/v1/__pycache__
+app/controllers/__pycache__
+app/core/__pycache__
+app/database/__pycache__
+app/models/__pycache__

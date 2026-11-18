@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from .departments import Department
+
 from datetime import datetime
 
 class UserRole(SQLModel, table=True):
@@ -21,5 +21,5 @@ class User(SQLModel, table=True):
     passport_number: str = Field(unique=True, max_length=10)
     inn: str = Field(unique=True, max_length=12)
     snils: str = Field(unique=True, max_length=15)
-    password_hash: str = Field(max_length=255, nullable=False)
+    password: str = Field(max_length=255, nullable=False)
     created_at: datetime = Field(default=None)
