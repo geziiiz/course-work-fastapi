@@ -14,3 +14,7 @@ class UserRead(UserBase):
     role_id: int
     department_id: int
     model_config = ConfigDict(from_attributes=True)
+class UserUpdate(BaseModel):
+    password: str | None = Field(min_length=8)
+    role_id: int | None = Field()
+    department_id:int | None = Field()

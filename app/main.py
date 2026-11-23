@@ -20,8 +20,6 @@ app_v1 = FastAPI(
     lifespan=on_startup
 )
 
-# Монтируем app_v1 в главное приложение
 app.mount("/api/v1", app_v1)
 
-# Добавляем роутеры в app_v1
 app_v1.include_router(user_router)

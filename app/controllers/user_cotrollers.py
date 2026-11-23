@@ -2,6 +2,7 @@ import logging
 from sqlmodel import Session, select, delete
 from app.models.user import User
 from app.schemas.user_schemas import *
+from app.core.security import hash_password
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ class UserController:
 
             profile = User(
                 email=data.email,
-                password=data.password,
+                password=hash_password(data.password),
                 surname=data.surname,
                 name=data.name,
                 patronymic=data.patronymic,
@@ -49,4 +50,39 @@ class UserController:
             session.rollback()
             logger.exception(f"Cannot add user: {repr(e)}")
             return None
+    @staticmethod
+    def delete_user(session: Session, user_id: int) -> bool:
+        """Удаляет профиль. True — если удаление прошло успешно."""
+        try:
+            user = session.get(User, user_id)
+            if not user:
+                logger.warning(f"Cannot delete profile: user with ID {user_id} does not exist")
+                return False
 
+            session.delete(user)
+            session.commit()
+            return True
+        except Exception as e:
+            session.rollback()
+            logger.exception(f"Cannot delete user with ID {user_id}: {repr(e)}")
+            return False
+    @staticmethod
+    def update_user(session: Session, user_id: int, data: UserUpdate) -> User:
+        """Обновляет профиль. None — если пользователь не найден."""
+        try:
+            user = session.get(User, user_id)
+            if not user:
+                logger.warning(f"Cannot update profile: user with ID {user_id} does not exist")
+                return None
+
+            for key, value in data.dict(exclude_unset=True).items():
+                setattr(user, key, value)
+
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+            return user
+        except Exception as e:
+            session.rollback()
+            logger.exception(f"Cannot update user with ID {user_id}: {repr(e)}")
+            return None
