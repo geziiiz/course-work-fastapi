@@ -2,11 +2,27 @@ import logging
 from sqlmodel import Session, select, delete
 from app.models.user import User
 from app.schemas.user_schemas import *
-from app.core.security import hash_password
+from app.core.security import hash_password, verify_password
 
 logger = logging.getLogger(__name__)
 
 class UserController:
+    @staticmethod
+    def authenticate(email: str, user_password: str, session: Session) -> User | None:
+        """Проверяет авторизационные данные (email + пароль)"""
+        try:
+            sql=select(User).where(User.email == email)
+            user = session.exec(sql).first()
+        except Exception as e:
+            logger.exception(f"Ошибка авторизации: {repr(e)}")
+            return None
+        if user is None:
+            logger.info(f"ошибка авторизации: {email} не существует")
+            return None
+        if not verify_password(user_password, user.password):
+            logger.info(f"Ошибка авторизации: неверный пароль {user_password}")
+            return None
+        return user
     @staticmethod
     def get_user_by_id(session: Session, user_id: int) -> User:
         try:
@@ -76,6 +92,8 @@ class UserController:
                 return None
 
             for key, value in data.dict(exclude_unset=True).items():
+                if key == "password":
+                    value = hash_password(value)
                 setattr(user, key, value)
 
             session.add(user)

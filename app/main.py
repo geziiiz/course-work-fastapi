@@ -2,6 +2,7 @@ from app.database.database import init_db, close_db
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.api.v1.user_api_router import router as user_router
+from app.api.v1.auth_api_router import router as auth_router
 
 @asynccontextmanager
 async def on_startup(app: FastAPI):
@@ -23,3 +24,4 @@ app_v1 = FastAPI(
 app.mount("/api/v1", app_v1)
 
 app_v1.include_router(user_router)
+app_v1.include_router(auth_router)
