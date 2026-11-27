@@ -1,2 +1,2 @@
-from app.database.database import init_db, close_db
-from app.database.session import get_session
+from .database import init_db, close_db
+from .session import get_session

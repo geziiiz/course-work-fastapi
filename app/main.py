@@ -1,5 +1,6 @@
 from app.database.database import init_db, close_db
 from fastapi import FastAPI
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from contextlib import asynccontextmanager
 from app.api.v1.user_api_router import router as user_router
 from app.api.v1.auth_api_router import router as auth_router
