@@ -4,6 +4,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from contextlib import asynccontextmanager
 from app.api.v1.user_api_router import router as user_router
 from app.api.v1.auth_api_router import router as auth_router
+from app.api.v1.department_api_router import router as department_router
 
 @asynccontextmanager
 async def on_startup(app: FastAPI):
@@ -26,3 +27,4 @@ app.mount("/api/v1", app_v1)
 
 app_v1.include_router(user_router)
 app_v1.include_router(auth_router)
+app_v1.include_router(department_router)
